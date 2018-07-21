@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_order_form_ftype_inherited" model="ir.ui.view">
+        <field name="name">pos.order.ftype.field.inherited</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+        <field name="arch" type="xml">
+            <field name="pos_reference" position="after">
+                <field name="order_type" />
+                <field name="is_void" />
+                <field name="driver_partner_id" />
+            </field>
+            <xpath expr="//field[@name='lines']//tree/field[@name='price_unit']" position="before">
+                <field name="is_void" />
+            </xpath>
+            <xpath expr="//field[@name='lines']//form//field[@name='price_unit']" position="before">
+                <field name="is_void" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pos_order_filter_floor_type" model="ir.ui.view">
+        <field name="name">pos.order.ftype.field.inherited</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]" position="inside">
+                <filter string="Order Type" domain="[]" context="{'group_by':'order_type'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_restaurant_floor_form_inherited" model="ir.ui.view">
+        <field name="name">restaurant.floor.ftype.field.inherited</field>
+        <field name="model">restaurant.floor</field>
+        <field name="inherit_id" ref="pos_restaurant.view_restaurant_floor_form" />
+        <field name="arch" type="xml">
+            <field name="background_color" position="after">
+                <field name="default_order_type" />
+            </field>
+        </field>
+    </record>
+</odoo>

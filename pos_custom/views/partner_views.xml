@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record  id="partner_view_buttons" model="ir.ui.view">
+        <field name="name">res.partner.view.bank</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <field name="barcode" position="before">
+                <field name="is_driver" />
+            </field>
+        </field>
+    </record>
+</odoo>

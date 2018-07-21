@@ -1,0 +1,26 @@
+.vdisabled {
+    cursor: inherit !important;
+}
+
+.pos .pos-receipt-container {
+    font-weight: bold;
+}
+
+.receipt-orderlines tr {
+    height: 23px;
+}
+
+.select-order-option {
+    background: #c686d8;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 128px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 3px 3px 0px 0px;
+}
+
+.void-order, .void-order .info-list li, .void-order .info em {
+    font-style: italic !important;
+    color: lightgray !important;
+}

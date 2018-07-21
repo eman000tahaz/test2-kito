@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ShowPopupDriverList">
+        <div class="modal-dialog">
+            <div class="popup">
+                <div class="header title">
+                    <div>
+                        <t t-esc="widget.options.title || '' " />
+                        <span class="cancel pull-right" style="font-size: 20px; cursor: pointer">X</span>
+                    </div>
+                </div>
+                <div class="service-list-scrollable touch-scrollable" style="text-align: center; padding-top: 40px;">
+                    <t t-if="widget.options and widget.options.records">
+                        <select class="control-button button" style="width: 80%; float: inherit;" name="services_sequence">
+                            <option>Select Driver</option>
+                            <t t-foreach="widget.options.records" t-as="partner">
+                                <option t-att-value="partner.id">
+                                    <t t-esc="partner.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </t>
+                    <t t-else="True">
+                        <p>Empty Services</p>
+                    </t>
+                </div>
+                <div class="footer centered">
+                    <div class="button confirm" t-att-data-partner-id="partner_id">
+                        Confirm
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-extend="PaymentScreenWidget">
+        <t t-jquery=".payment-buttons" t-operation="append">
+            <div class='button js_print_invoice'>
+                <i class='fa fa-print' />
+                Print Invoice
+            </div>
+            <div class='button js_set_driver'>
+                <i class='fa fa-user' />
+                <span class='js_driver_name'>
+                    <t t-if="driver">
+                        <t t-esc="driver" />
+                    </t>
+                    <t t-else="True">
+                        Driver
+                    </t>
+                </span>
+            </div>
+        </t>
+    </t>
+
+    <t t-name="OrderTypeSelection">
+        <select class="control-button js_order_type" name="order_type">
+            <option value="dining">Dining</option>
+            <option value="takeaway">Take Away</option>
+            <option value="delivery">Delivery</option>
+        </select>
+    </t>
+
+    <t t-name="Orderline">
+        <li t-attf-class="orderline #{ line.selected ? 'selected' : '' } #{line.get_void() ? 'void-order' : ''}">
+            <span class="product-name">
+                <t t-esc="line.get_product().display_name"/>
+                <t t-if="line.get_product().tracking!=='none'">
+                    <i t-attf-class="oe_link_icon fa fa-list oe_icon line-lot-icon #{line.has_valid_product_lot() ? 'oe_green' : 'oe_red' }"/>
+                </t>
+            </span>
+            <span class="price">
+                <t t-esc="widget.format_currency(line.get_display_price())"/>
+            </span>
+            <ul class="info-list">
+                <t t-if="line.get_quantity_str() !== '1' || line.selected ">
+                    <li class="info">
+                        <em>
+                            <t t-esc="line.get_quantity_str()" />
+                        </em>
+                        <t t-esc="line.get_unit().name" />
+                        at
+                        <t t-esc="widget.format_currency(line.get_unit_display_price(),'Product Price')" />
+                        /
+                        <t t-esc="line.get_unit().name" />
+                    </li>
+                </t>
+                <t t-if="line.get_discount_str() !== '0'">
+                    <li class="info">
+                        With a 
+                        <em>
+                            <t t-esc="line.get_discount_str()" />%
+                        </em>
+                        discount
+                    </li>
+                </t>
+                <!-- <t t-set="extra_items" t-value="line.get_extra_items()" />
+                <ul t-if="extra_items">
+                    <li class="info orderline-item" t-foreach="extra_items" t-as="item">
+                        <i class='fa fa-plus'/>
+                        <t t-esc="item.display_name"/>
+                    </li>
+                </ul> -->
+            </ul>
+        </li>
+    </t>
+
+    <t t-extend="OrderSelectorWidget">
+        <t t-jquery=".order-selector" t-operation="prepend">
+            <select class="select-order-option">
+                <t t-foreach="widget.pos.get_order_list()" t-as="order">
+                    <t t-if='order === widget.pos.get_order()'>
+                        <option selected="selected" class="selected" t-att-data-uid="order.uid">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+                        </option>
+                    </t>
+                    <t t-if='order !== widget.pos.get_order()'>
+                        <option t-att-data-uid="order.uid">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+                        </option>
+                    </t>
+                </t>
+            </select>
+        </t>
+    </t>
+    <t t-name="ButtonVoidOrder">
+        <span class="control-button order-submit">
+            <i class="fa fa-times"></i>
+            Void Line
+        </span>
+    </t>
+    <t t-name="VoidConfirmPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-confirm">
+                <p class="title"><t t-esc=" widget.options.title || 'Confirm ?' " /></p>
+                <p class="body"><t t-esc="  widget.options.body || '' "/></p>
+                <div class="footer">
+                    <div class="button void-confirm">
+                        Void Order
+                    </div>
+                    <div class="button confirm">
+                        Confirm
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-extend="PosTicket">
+        <t t-jquery=".pos-center-align" t-operation="replace">
+            <t t-if='receipt.company.logo'>
+                <div class="pos-center-align">
+                    <img t-att-src='receipt.company.logo' style="height: 95px;"/>
+                </div>
+                <br/>
+            </t>
+        </t>
+
+        <t t-jquery=".receipt-user" t-operation="after">
+            <t t-if='receipt.table'>
+                <br />
+                <div class="receipt-user">
+                    <span class="v-table-no">Table No: <t t-esc="receipt.table" /></span>
+                </div>
+            </t>
+            <t t-if="receipt.date.localestring">
+                <div class="">
+                    <span>Order Date: <t t-esc="receipt.date.localestring" /></span>
+                </div>
+            </t>
+            <t t-if="receipt.order_type == 'delivery' and receipt.driver_name">
+                <div>Driver: <t t-esc="receipt.driver_name" /></div>
+            </t>
+            <t t-set="client" t-value="order and order.attributes and order.attributes.client" />
+            <div class='v-customer-address' t-if="order.customer_count > 0 and client">
+                <br />
+                <div class="">
+                    <span>Customer: <t t-esc="client.name or ''" /></span>
+                </div>
+                <div class="">
+                    <span>Phone: <t t-esc="client.phone or ''" /></span>
+                </div>
+                <div class="">
+                    <span>Area: <t t-esc="client.city or ''" /></span>
+                </div>
+                <div class="">
+                    <span>Block: <t t-esc="client.block or ''" /></span>
+                </div>
+                <div class="">
+                    <span>Street: <t t-esc="client.street or ''" /></span>
+                </div>
+                <t t-if="client.home_type == 'apartment'">
+                    <div class="">
+                        <span>Building: <t t-esc="client.building or ''" /></span>
+                    </div>
+                    <div class="">
+                        <span>Apartment No: <t t-esc="client.apartment_no or ''" /></span>
+                    </div>
+                </t>
+                <t t-if="client.home_type == 'home'">
+                    <div class="">
+                        <span>House: <t t-esc="client.house or ''" /></span>
+                    </div>
+                </t>
+                <t t-if="client.home_type == 'office'">
+                    <div class="">
+                        <span>Building: <t t-esc="client.building or ''" /></span>
+                    </div>
+                    <div class="">
+                        <span>Floor: <t t-esc="client.floor or ''" /></span>
+                    </div>
+                    <div class="">
+                        <span>Office: <t t-esc="client.office or ''" /></span>
+                    </div>
+                </t>
+                <div class="">
+                    <span>Postcode: <t t-esc="client.zip or ''" /></span>
+                </div>
+            </div>
+        </t>
+        <t t-jquery="colgroup" t-operation="replace">
+            <col width="65%" />
+            <col width="10%" />
+            <col width="25%" />
+        </t>
+        <t t-jquery=".receipt-orderlines tr" t-operation="replace">
+            <t t-foreach="orderlines" t-as="orderline">
+            <tr t-if="!orderline.is_void">
+                <td>
+                    <t t-esc="orderline.get_product().display_name"/>
+                    <t t-if="orderline.get_discount() > 0">
+                        <div class="pos-disc-font">
+                            With a <t t-esc="orderline.get_discount()"/>% discount
+                        </div>
+                    </t>
+                    <t t-set="extra_items" t-value="orderline.get_extra_items()" />
+                    <t t-if="extra_items">
+                        <t t-foreach="extra_items" t-as="extra">
+                            <div style="margin-left: 5%;">
+                                <span class="fa fa-plus" />
+                                <t t-esc="extra.display_name" />
+                                <span t-esc="widget.format_currency(extra.price)" />
+                            </div>
+                        </t>
+                    </t>
+                    <t t-if="orderline.note">
+                        <br />
+                        <span style="padding-left: 5px;">
+                            - <t t-esc="orderline.note" />
+                        </span>
+                    </t>
+                </td>
+                <td class="pos-center-align" style="width: 30px">
+                    <t t-esc="orderline.get_quantity()"/>
+                </td>
+                <td class="pos-right-align">
+                    <!-- <t t-if="not receipt.bill"> -->
+                        <t t-esc="widget.format_currency(orderline.get_display_price())"/>
+                    <!-- </t> -->
+                </td>
+            </tr>
+            </t>
+        </t>
+
+        <t t-jquery=".receipt-change" t-operation="after">
+            <div class="pos-center-align">
+                <t t-esc="receipt.formatted_validation_date"/> <t t-esc="receipt.name"/>
+            </div>
+        </t>
+    </t>
+</templates>
