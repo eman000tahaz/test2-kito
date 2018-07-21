@@ -38,11 +38,14 @@ models.Orderline = models.Orderline.extend({
         }
     },
     get_extra_items: function() {
-        return this.extra_items;
+        if (this.extra_items && this.extra_items.length) {
+            return this.extra_items;
+        }
+        return [];
     },
     get_all_extra_products: function() {
         var self = this;
-        if(this.product && this.product.extra_products && this.product.extra_products.length){
+        if(this.product && this.product.extra_products.length){
             var products = _.each(this.product.extra_products, function(prod){
                 if (!prod){
                     return;
@@ -101,23 +104,18 @@ var ProductAdditionalItems = PopupWidget.extend({
     template: 'AdditionalItemPopupWidget',
     show: function(options) {
         options = options || {};
-        this.items = [];
         this._super(options);
         if (options.items) {
             this.events["click .prod_additional_item .button"] = "click_extra_item";
-            this.items = options.items || [];
-            console.log('___ this.items : ', this.items);
-            this.items.forEach(function(item) {
-                if(item){
-                    item.active = false;
-                }
-            });
-
-            this.extra_items = options.extra_items || false;
-            this.set_active_items();
+            this.items = options.items;
         }
-        console.log('___ else : ', this);
+        this.items.forEach(function(item) {
+            item.active = false;
+        });
 
+        this.extra_items = options.extra_items || false;
+
+        this.set_active_items();
         this.renderElement();
     },
     set_active_items: function() {

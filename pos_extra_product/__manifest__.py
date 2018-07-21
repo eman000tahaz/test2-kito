@@ -4,8 +4,6 @@
     "summary": """Set predefined products for separate product line""",
     "category": "Point of Sale",
     "version": "1.0.1",
-    'Author': 'Sismatix Co.',
-    'website': 'http://sismatix.com/',
     "application": False,
     "sequence": 0,
     "description": """

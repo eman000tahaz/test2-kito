@@ -18,6 +18,7 @@
                 <div class="product_note prod_additional_item">
                     <ul t-if="widget.items">
                         <t t-foreach="widget.items.slice(0,8)" t-as="item">
+                            <t t-log="item" />
                             <li>
                                 <t t-if="item.active">
                                     <div t-attf-data-id="{{item.id}}" class="button active"><t t-esc="item.display_name"/></div>
@@ -66,6 +67,7 @@
                         </div>
                     </t>
                     <t t-set="extra_items" t-value="orderline.get_extra_items()" />
+                    <t t-log="extra_items" />
                     <t t-if="extra_items">
                         <t t-foreach="extra_items" t-as="extra">
                             <div style="margin-left: 5%;">
