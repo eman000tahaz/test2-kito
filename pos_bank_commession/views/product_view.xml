@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+
+        <record id="commession_journal_form" model="ir.ui.view">
+            <field name="name">commession.journal.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="journal_user" position="after">
+                    <field name="is_commession"/>
+                    <field name="commession_value"
+                           attrs="{'invisible': [('is_commession', '==', False)],'required': [('is_commession', '==', True)]}"/>
+                    <field name="commession_account"
+                           attrs="{'invisible': [('is_commession', '==', False)],'required': [('is_commession', '==', True)]}"/>
+                    <field name="commession_account2"
+                           attrs="{'invisible': [('is_commession', '==', False)],'required': [('is_commession', '==', True)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="commession_pos_session_form" model="ir.ui.view">
+            <field name="name">commession.pos.session.form</field>
+            <field name="model">pos.session</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <button name="action_pos_session_create_commession_move" type="object" string="Create Bank Charges"
+                            attrs="{'invisible':[('commession_check','!=',False)]}" class="oe_highlight"/>
+                </field>
+                <field name="config_id" position="after">
+                    <field name="commession_check" readonly="1"></field>
+                    <!--<field name="commession_move" readonly="1"></field>-->
+                </field>
+            </field>
+        </record>
+
+        <record id="commession_pos_session_tree" model="ir.ui.view">
+            <field name="name">commession.pos.session.tree</field>
+            <field name="model">pos.session</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_session_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <button name="action_pos_session_create_commession_move" type="object" string="Create Bank Charges"
+                            attrs="{'invisible':[('commession_check','!=',False)]}" class="oe_highlight"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="commession_check" readonly="1"></field>
+                    <!--<field name="commession_move" readonly="1"></field>-->
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

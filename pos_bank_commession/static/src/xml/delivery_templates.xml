@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="DeliveryButton">
+        <div class='control-button js_delivery'>
+            <i class='fa fa-tag' /> Delivery
+        </div>
+    </t>
+
+
+</templates>
