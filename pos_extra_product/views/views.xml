@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="product_extra_product_form_inherit" model="ir.ui.view">
+            <field name="name">product.product.form.extra.product</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='notes']" position="after">
+                    <page string="Extra Products">
+                        <field name="extra_product_ids" />
+                    </page>
+                </xpath>
+            </field>
+        </record>
+</odoo>

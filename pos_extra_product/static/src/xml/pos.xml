@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="AdditionalItemButton">
+        <span class="control-button order-submit">
+            <i class="fa fa-plus"></i>
+            Extra Items
+        </span>
+    </t>
+
+    <t t-name="AdditionalItemPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup">
+                <div class="header title">
+                    <div>
+                        <t t-esc="widget.options.title || '' " />
+                    </div>
+                </div>
+                <div class="product_note prod_additional_item">
+                    <ul t-if="widget.items">
+                        <t t-foreach="widget.items.slice(0,8)" t-as="item">
+                            <li>
+                                <t t-if="item.active">
+                                    <div t-attf-data-id="{{item.id}}" class="button active"><t t-esc="item.display_name"/></div>
+                                </t>
+                                <t t-if="!item.active">
+                                    <div t-attf-data-id="{{item.id}}" class="button"><t t-esc="item.display_name"/></div>
+                                </t>
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+                <div class="footer centered">
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                    <div class="button confirm">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-extend="Orderline">
+        <t t-jquery="ul.info-list" t-operation="after">
+            <t t-if="line">
+                <t t-set="extra_items" t-value="line.get_extra_items()" />
+                <ul t-if="extra_items">
+                    <li class="info orderline-item" t-foreach="extra_items" t-as="item">
+                        <i class='fa fa-plus'/>
+                        <t t-esc="item.display_name"/>
+                    </li>
+                </ul>
+            </t>
+        </t>
+    </t>
+
+    <t t-extend="PosTicket">
+        <t t-jquery=".receipt-orderlines tr" t-operation="replace">
+            <tr t-foreach="orderlines" t-as="orderline">
+                <td>
+                    <t t-esc="orderline.get_product().display_name"/>
+                    <t t-if="orderline.get_discount() > 0">
+                        <div class="pos-disc-font">
+                            With a <t t-esc="orderline.get_discount()"/>% discount
+                        </div>
+                    </t>
+                    <t t-set="extra_items" t-value="orderline.get_extra_items()" />
+                    <t t-if="extra_items">
+                        <t t-foreach="extra_items" t-as="extra">
+                            <div style="margin-left: 5%;">
+                                <span class="fa fa-plus" />
+                                <t t-esc="extra.display_name" />
+                                <span t-esc="widget.format_currency(extra.price)" />
+                            </div>
+                        </t>
+                    </t>
+                </td>
+                <td class="pos-right-align">
+                    <t t-esc="orderline.get_quantity_str_with_unit()"/>
+                </td>
+                <td class="pos-right-align">
+                    <t t-esc="widget.format_currency(orderline.get_display_price())"/>
+                </td>
+            </tr>
+        </t>
+    </t>
+
+</templates>

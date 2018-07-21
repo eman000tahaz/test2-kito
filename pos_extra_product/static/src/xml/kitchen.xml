@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="KitchenOrder">
+        <t t-jquery=".k-orderline-list tbody tr td:nth-child(3)" t-operation="replace">
+            <td class="k-table-row" t-attf-style="background: #{line.product.bgcolor}">
+                <span t-esc="line.product.display_name" />
+                <t t-if="line.extra_items">
+                    <ul class="extra-item-tags">
+                        <li t-foreach="line.extra_items" t-as="item">
+                            <t t-esc="item.display_name" />
+                        </li>
+                    </ul>
+                </t>
+            </td>
+        </t>
+    </t>
+</templates>

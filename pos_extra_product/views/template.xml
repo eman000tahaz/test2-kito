@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="pos_extra_product_assets" inherit_id="point_of_sale.assets">
+            <xpath expr="//link[last()]" position="after">
+                <script type="text/javascript" src="/pos_extra_product/static/src/js/models.js"></script>
+                <script type="text/javascript" src="/pos_extra_product/static/src/js/pos.js"></script>
+                <link rel="stylesheet" href="/pos_extra_product/static/src/css/pos.css"/>
+            </xpath>
+        </template>
+    </data>
+</openerp>
